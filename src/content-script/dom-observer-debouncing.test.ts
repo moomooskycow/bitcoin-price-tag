@@ -43,7 +43,7 @@ describe('dom-observer debouncing mechanism', () => {
         mockAnnotationFunction,
         TEST_DEBOUNCE_MS,
         processedNodes,
-        mockMutationObserver as unknown as typeof MutationObserver
+        mockMutationObserver
       );
       
       controller.start(mockPriceData);

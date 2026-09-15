@@ -74,7 +74,7 @@ export const createMockMutationObserver = () => {
   const instances: MutationObserver[] = [];
   let capturedCallback: MutationCallback | null = null;
   
-  const MockMutationObserver = vi.fn().mockImplementation((callback: MutationCallback) => {
+  const MockMutationObserver = vi.fn().mockImplementation(function (callback: MutationCallback) {
     capturedCallback = callback;
     const instance = createMockMutationObserverInstance();
     instances.push(instance);
@@ -101,7 +101,7 @@ export const createMockMutationObserverWithCallback = () => {
   const mockObserve = vi.fn();
   const mockDisconnect = vi.fn();
   
-  const MockMutationObserver = vi.fn().mockImplementation((callback: MutationCallback) => {
+  const MockMutationObserver = vi.fn().mockImplementation(function (callback: MutationCallback) {
     capturedCallback = callback;
     return {
       observe: mockObserve,

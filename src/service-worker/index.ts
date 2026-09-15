@@ -164,7 +164,7 @@ function handleMessage(
         code: 'validation_error'
       },
       timestamp: Date.now()
-    } as PriceResponseMessage);
+    });
 
     return true; // We've handled the message
   }

@@ -548,7 +548,7 @@ async function expectLogToContain(
       mockApiModule.fetchBtcPrice.mockResolvedValueOnce(validPriceData);
       mockCacheModule.setCachedPrice.mockResolvedValueOnce(undefined);
 
-      handlers.onAlarm!({ name: REFRESH_ALARM_NAME, scheduledTime: Date.now(), periodInMinutes: undefined } as chrome.alarms.Alarm);
+      handlers.onAlarm!({ name: REFRESH_ALARM_NAME, scheduledTime: Date.now(), periodInMinutes: undefined });
 
       // Wait for async operations to complete
       await vi.runAllTimersAsync();
@@ -563,7 +563,7 @@ async function expectLogToContain(
     it('should handle API fetch failure', async () => {
       mockApiModule.fetchBtcPrice.mockRejectedValueOnce(new Error('Network error'));
 
-      handlers.onAlarm!({ name: REFRESH_ALARM_NAME, scheduledTime: Date.now(), periodInMinutes: undefined } as chrome.alarms.Alarm);
+      handlers.onAlarm!({ name: REFRESH_ALARM_NAME, scheduledTime: Date.now(), periodInMinutes: undefined });
 
       // Wait for async operations to complete
       await vi.runAllTimersAsync();
@@ -580,7 +580,7 @@ async function expectLogToContain(
       // Mock API success but cache write failure
       mockApiModule.fetchBtcPrice.mockRejectedValueOnce(new Error('Storage error'));
 
-      handlers.onAlarm!({ name: REFRESH_ALARM_NAME, scheduledTime: Date.now(), periodInMinutes: undefined } as chrome.alarms.Alarm);
+      handlers.onAlarm!({ name: REFRESH_ALARM_NAME, scheduledTime: Date.now(), periodInMinutes: undefined });
 
       // Wait for async operations to complete
       await vi.runAllTimersAsync();
@@ -594,7 +594,7 @@ async function expectLogToContain(
     });
 
     it('should ignore unknown alarms', async () => {
-      handlers.onAlarm!({ name: 'unknown_alarm', scheduledTime: Date.now(), periodInMinutes: undefined } as chrome.alarms.Alarm);
+      handlers.onAlarm!({ name: 'unknown_alarm', scheduledTime: Date.now(), periodInMinutes: undefined });
 
       await expectLogToContain('info', 'Alarm fired');
       expect(mockLoggerAdapter.info.mock.calls.length).toBeGreaterThan(0);
@@ -934,8 +934,8 @@ async function expectLogToContain(
       mockLoggerAdapter.reset();
 
       // Trigger two alarms concurrently
-      const alarm1 = handlers.onAlarm!({ name: REFRESH_ALARM_NAME, scheduledTime: Date.now(), periodInMinutes: undefined } as chrome.alarms.Alarm);
-      const alarm2 = handlers.onAlarm!({ name: REFRESH_ALARM_NAME, scheduledTime: Date.now(), periodInMinutes: undefined } as chrome.alarms.Alarm);
+      const alarm1 = Promise.resolve(handlers.onAlarm!({ name: REFRESH_ALARM_NAME, scheduledTime: Date.now(), periodInMinutes: undefined }));
+      const alarm2 = Promise.resolve(handlers.onAlarm!({ name: REFRESH_ALARM_NAME, scheduledTime: Date.now(), periodInMinutes: undefined }));
 
       await Promise.all([alarm1, alarm2]);
       await vi.runAllTimersAsync();

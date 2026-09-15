@@ -151,7 +151,7 @@ describe('dom-observer.ts', () => {
         expect(mutationCallback).not.toBeNull();
         
         // Call the mutation callback directly
-        if (mutationCallback) { const cb = mutationCallback as (mutations: MutationRecord[], observer: MutationObserver) => void;
+        if (mutationCallback) { const cb = mutationCallback;
           cb(records, mockObserver);
           
           // Fast-forward time to trigger the debounced function
@@ -789,10 +789,12 @@ describe('dom-observer.ts', () => {
       const mockObserve = vi.fn(() => {
         throw new Error('Mock observe error');
       });
-      const mockMutationObserver = vi.fn(() => ({
-        observe: mockObserve,
-        disconnect: vi.fn()
-      }));
+      const mockMutationObserver = vi.fn(function () {
+        return {
+          observe: mockObserve,
+          disconnect: vi.fn()
+        };
+      });
       
       // Create observer controller with injected mock constructor
       const controller = createDomObserver(
@@ -817,10 +819,12 @@ describe('dom-observer.ts', () => {
       const mockDisconnect = vi.fn(() => {
         throw new Error('Mock disconnect error');
       });
-      const mockMutationObserver = vi.fn(() => ({
-        observe: vi.fn(),
-        disconnect: mockDisconnect
-      }));
+      const mockMutationObserver = vi.fn(function () {
+        return {
+          observe: vi.fn(),
+          disconnect: mockDisconnect
+        };
+      });
       
       // Create observer controller with injected mock constructor
       const controller = createDomObserver(
@@ -961,7 +965,7 @@ describe('dom-observer.ts', () => {
           expect(setTimeoutSpy).toHaveBeenCalled();
           
           // Get the function that was passed to setTimeout
-          const processDebouncedNodesFn = setTimeoutSpy.mock.calls[0][0] as () => void;
+          const processDebouncedNodesFn = setTimeoutSpy.mock.calls[0][0];
           
           // Clear pendingNodes by calling processDebouncedNodes once
           processDebouncedNodesFn();

@@ -109,7 +109,7 @@ export async function requestPriceData(timeoutMs = REQUEST_TIMEOUT_MS): Promise<
       // Comprehensive security validation of response
       const validationResult = SecureValidation.validateChromeMessage(
         response, 
-        { origin: 'service-worker' } as chrome.runtime.MessageSender, 
+        { origin: 'service-worker' }, 
         'PRICE_RESPONSE'
       );
       
