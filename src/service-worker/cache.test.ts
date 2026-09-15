@@ -64,8 +64,11 @@ describe('Cache functionality test', () => {
     // Setup global fetch mock fresh each time
     global.fetch = mockFetch as any;
     
-    // Mock Date.now for consistent timestamps
-    vi.spyOn(Date, 'now').mockReturnValue(1734447415000);
+    // Mock Date.now for consistent timestamps — pin to the actual current
+    // time so module-level fixtures (which use the real clock) stay within
+    // the validator's ±1 year timestamp window.
+    const frozenNow = Date.now();
+    vi.spyOn(Date, 'now').mockReturnValue(frozenNow);
     
     // Import the module fresh
     await vi.importActual('./index');

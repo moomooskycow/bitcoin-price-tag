@@ -68,7 +68,7 @@ describe('serializeError', () => {
   });
 
   it('should handle null and undefined', () => {
-    expect(serializeError(null as unknown)).toMatchObject({
+    expect(serializeError(null)).toMatchObject({
       name: 'UnknownError',
       message: 'Unknown error'
     });
@@ -81,7 +81,7 @@ describe('serializeError', () => {
 
   it('should handle non-Error objects', () => {
     const obj = { error: 'Something went wrong', code: 42 };
-    const serialized = serializeError(obj as unknown);
+    const serialized = serializeError(obj);
     
     expect(serialized).toMatchObject({
       name: 'UnknownError',

@@ -69,7 +69,11 @@ describe('Service Worker Cache Test', () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     
     // Mock Date.now
-    vi.spyOn(Date, 'now').mockReturnValue(1734447415000);
+    // Mock Date.now for consistent timestamps — pin to the actual current
+    // time so fixtures (which use the real clock) stay within the validator's
+    // ±1 year timestamp window.
+    const frozenNow = Date.now();
+    vi.spyOn(Date, 'now').mockReturnValue(frozenNow);
   });
 
   afterEach(() => {
